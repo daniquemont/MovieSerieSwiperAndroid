@@ -4,29 +4,27 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+
 public class Movie {
-    @ColumnInfo
-    private String movieName;
+    public String movieName;
 
-    @ColumnInfo
-    private int movieLength;
 
-    @ColumnInfo
-    private String description;
+    public Movie() {
 
-    @PrimaryKey
-    private int uuid;
-
-    public Movie(String movieName, int movieLength, String description, int uuid){
-        this.movieName = movieName;
-        this.movieLength = movieLength;
-        this.description = description;
-        this.uuid = uuid;
     }
 
+    public Movie(String name){
+        this.movieName = name;
+    }
+
+
     public String getMovieName(){return this.movieName;}
+    public void setMovieName(String movieName){
+        this.movieName = movieName;
+    }
+/*
     public int getMovieLength(){return this.movieLength;}
     public String getDescription(){return this.description;}
-    public int getUuid(){return this.uuid;}
+    public int getUuid(){return this.uuid;}*/
+
 }

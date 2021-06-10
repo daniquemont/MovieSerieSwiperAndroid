@@ -1,5 +1,6 @@
 package com.example.movieserieswiperandroidapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    private Movie[] movies;
 
-    public MovieAdapter(Movie[] movies) {this.movies = movies;}
+    private Context context;
+    private List<Movie> list;
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
-
-        public MovieViewHolder(View v) {
-            super(v);
-            textView = v.findViewById(R.id.textView);
-        }
+    public MovieAdapter(Context context, List<Movie> list){
+        this.context = context;
+        this.list = list;
     }
 
     @NonNull
@@ -35,12 +34,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position){
-        holder.textView.setText(movies[position].getMovieName());
+        Movie movie = list.get(position);
+
+        holder.textTitle.setText(movie.getMovieName());
     }
 
     @Override
-    public int getItemCount(){return movies.length;}
+    public int getItemCount(){
+        return list.size();
+    }
 
+    public class MovieViewHolder extends RecyclerView.ViewHolder{
+        public TextView textTitle;
 
+        public MovieViewHolder(View itemView){
+            super(itemView);
+
+            textTitle = itemView.findViewById(R.id.main_title);
+        }
+    }
 }
 
