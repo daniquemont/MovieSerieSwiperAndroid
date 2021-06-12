@@ -19,10 +19,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private Context context;
     private List<Movie> list;
 
-    public MovieAdapter(Context context, List<Movie> list){
-        this.context = context;
-        this.list = list;
+    public MovieAdapter(Context applicationContext, List<Movie> movieList) {
+        this.context = applicationContext;
+        this.list = movieList;
     }
+
 
     @NonNull
     @Override
@@ -37,6 +38,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = list.get(position);
 
         holder.textTitle.setText(movie.getMovieName());
+        holder.textDescription.setText(movie.getMovieDescription());
+        holder.textLanguage.setText(movie.getMovieLanguage());
     }
 
     @Override
@@ -45,12 +48,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder{
-        public TextView textTitle;
+        public TextView textTitle, textDescription, textLanguage;
 
         public MovieViewHolder(View itemView){
             super(itemView);
 
             textTitle = itemView.findViewById(R.id.main_title);
+            textDescription = itemView.findViewById(R.id.main_description);
+            textLanguage = itemView.findViewById(R.id.main_language);
         }
     }
 }
