@@ -23,18 +23,11 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        setupUI();
-        setupListeners();
-    }
-
-    private void setupUI() {
         lEmail = findViewById(R.id.email);
         lPassword = findViewById(R.id.password);
         lLoginBtn = findViewById(R.id.loginBtn);
         lRegisterBtn = findViewById(R.id.createText);
-    }
 
-    private void setupListeners(){
         lLoginBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -45,12 +38,12 @@ public class Login extends AppCompatActivity {
 
         lRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(Login.this, Register.class);
-//                startActivity(intent);
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), Register.class));
             }
         });
     }
+
 
     void checkUsername(){
         boolean isValid = true;
@@ -74,9 +67,10 @@ public class Login extends AppCompatActivity {
 
         if(isValid){
             if(email.equals("test@test.com") && password.equals("password")){
-                Intent intent = new Intent(Login.this, Register.class);
-                startActivity(intent);
-                this.finish();
+//                Intent intent = new Intent(Login.this, Register.class);
+//                startActivity(intent);
+//                this.finish();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }else{
                 Toast.makeText(this, "Verkeerde email of wachtwoord", Toast.LENGTH_SHORT).show();
             }
