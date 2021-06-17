@@ -29,21 +29,25 @@ public class Register extends AppCompatActivity {
         rRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = rEmail.getText().toString().trim();
-                String password = rPassword.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)){
-                    rEmail.setError("Email is niet ingevuld");
-                    return;
-                }
-                if (TextUtils.isEmpty(password)){
-                    rPassword.setError("Password is niet ingevuld");
-                    return;
-                }
-                if(password.length() < 6){
-                    rPassword.setError("Password moet meer dan 6 karakters zijn");
-                }
+                checkData();
             }
         });
+    }
+
+    void checkData(){
+        String email = rEmail.getText().toString().trim();
+        String password = rPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)){
+            rEmail.setError("Email is niet ingevuld");
+            return;
+        }
+        if (TextUtils.isEmpty(password)){
+            rPassword.setError("Password is niet ingevuld");
+            return;
+        }
+        if(password.length() < 6){
+            rPassword.setError("Password moet meer dan 6 karakters zijn");
+        }
     }
 }
