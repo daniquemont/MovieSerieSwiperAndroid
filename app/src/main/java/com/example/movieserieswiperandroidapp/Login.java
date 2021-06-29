@@ -5,12 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.Response;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Login extends AppCompatActivity {
 
@@ -44,7 +57,6 @@ public class Login extends AppCompatActivity {
         });
     }
 
-
     void checkUsername(){
         boolean isValid = true;
         String email = lEmail.getText().toString().trim();
@@ -66,15 +78,46 @@ public class Login extends AppCompatActivity {
         }
 
         if(isValid){
-            if(email.equals("test@test.com") && password.equals("password")){
-//                Intent intent = new Intent(Login.this, Register.class);
-//                startActivity(intent);
-//                this.finish();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }else{
-                Toast.makeText(this, "Verkeerde email of wachtwoord", Toast.LENGTH_SHORT).show();
-            }
+//            if(email.equals("test@test.com") && password.equals("password")){
+////                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+////            }else{
+////                Toast.makeText(this, "Verkeerde email of wachtwoord", Toast.LENGTH_SHORT).show();
+////            }
+            login(email, password);
+//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
+    }
+
+
+    public void login(String email, String password) {
+        String url = "https://movieserieswiperdb-qioab.ondigitalocean.app/api/auth/login";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("checkResponse", response);
+                        Toast.makeText(Login.this, "Succesvol geregistreerd" + response, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("registerError", error.toString());
+                        Toast.makeText(Login.this, "Register Error! " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     boolean isEmail(EditText text){
