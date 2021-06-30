@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MovieSerieSwiperAndroidApp">
+        <activity android:name=".Profile"></activity>
+
         <activity android:name=".Login"></activity>
         <activity android:name=".Register">
             <intent-filter>
@@ -29,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

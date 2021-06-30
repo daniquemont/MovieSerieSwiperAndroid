@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String APIurl = "https://api.themoviedb.org/3/movie/popular?api_key=c90281a1d17bd06cb743a01a02f7c620&language=en-US";
 
+    ImageButton profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +61,21 @@ public class MainActivity extends AppCompatActivity {
         mList.addItemDecoration(dividerItemDecoration);
         mList.setAdapter(adapter);
 
-
+        profileButton = findViewById(R.id.profileButton);
+        Bundle bundle = getIntent().getExtras();
+        String token = bundle.getString("token");
+        Log.d("ProfileToken", token);
 
         getData();
+
+        profileButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Profile.class);
+                intent.putExtra("token", token);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getData(){

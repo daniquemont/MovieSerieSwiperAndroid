@@ -21,6 +21,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,11 +81,6 @@ public class Login extends AppCompatActivity {
         }
 
         if(isValid){
-//            if(email.equals("test@test.com") && password.equals("password")){
-////                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-////            }else{
-////                Toast.makeText(this, "Verkeerde email of wachtwoord", Toast.LENGTH_SHORT).show();
-////            }
             login(email, password);
 //            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
@@ -97,7 +95,19 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("checkResponse", response);
-                        Toast.makeText(Login.this, "Succesvol geregistreerd" + response, Toast.LENGTH_SHORT).show();
+                        String responseString = response;
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(responseString);
+                            String token = json.getString("access_token");    //result is key for which you need to retrieve data
+                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            intent.putExtra("token", token);
+                            startActivity(intent);
+                            Log.d("accessToken", token);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(Login.this, "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
