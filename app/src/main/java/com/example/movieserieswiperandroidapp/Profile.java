@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,16 +29,27 @@ import java.util.Map;
 
 public class Profile extends AppCompatActivity {
 
-    Button cLogoutButton;
+    Button logoutButton;
+    TextView username;
+    RadioButton rbtnFilm;
+    RadioButton rbtnSerie;
+    RadioGroup serieOfFilms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        cLogoutButton = findViewById(R.id.logoutButton);
+        logoutButton = findViewById(R.id.logoutButton);
+        username = findViewById(R.id.userName);
+        rbtnFilm = findViewById(R.id.radioButtonFilm);
+        rbtnSerie = findViewById(R.id.radioButtonSerie);
+        serieOfFilms = findViewById(R.id.radioGroup);
 
-        cLogoutButton.setOnClickListener(new View.OnClickListener(){
+        getUsername(username);
+        serieOfFilms();
+
+        logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 logout();
@@ -44,6 +57,67 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    public void serieOfFilms(){
+        serieOfFilms.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioButtonFilm:
+                        rbtnFilm.isChecked();
+                        Log.d("checkRadio", "Jaaaaaaa");
+                        break;
+                    case R.id.radioButtonSerie:
+                        rbtnSerie.isChecked();
+                        Log.d("checkRadio", "Jaaaaaaa");
+                        break;
+                }
+            }
+        });
+    }
+
+    public void getUsername(TextView username){
+        String url = "https://movieserieswiperdb-qioab.ondigitalocean.app/api/auth/user-profile";
+        Bundle bundle = getIntent().getExtras();
+        String token = bundle.getString("token");
+        Log.d("ProfileToken", token);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String responseString = response;
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(responseString);
+                            String name = json.getString("name");
+                            username.setText(name);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("registerError", error.toString());
+                        Toast.makeText(Profile.this, "Error! " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> header = new HashMap<>();
+                header.put("Authorization", "Bearer " + token);
+                Log.d("checkHeader", header.toString());
+                return header;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     public void logout(){
@@ -79,7 +153,5 @@ public class Profile extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
 
 }
