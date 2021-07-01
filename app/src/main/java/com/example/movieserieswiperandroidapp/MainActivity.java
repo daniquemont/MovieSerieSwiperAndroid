@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,22 +33,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private CardStackLayoutManager manager;
     public CardStackAdapter adapter;
-
-
+    public List<ItemModel> items = new ArrayList<>();
+    public List<SavedItemsModel> savedItems = new ArrayList<>();
+    public List<String> addedMoviesForSwipe = new ArrayList<>();
+    public List<String> moviesSwipedRight = new ArrayList<>();
+    public int Index = 0;
+    public String movieName;
+    public String movieGenre;
+    public String movieDescription;
+    public String movieImage;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         CardStackView cardStackView = findViewById(R.id.card_stack_view);
@@ -62,14 +71,19 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
                 if (direction == Direction.Right){
                     Toast.makeText(MainActivity.this, "Direction Right", Toast.LENGTH_SHORT).show();
-
-
+                    //moviesSwipedRight.add(addedMoviesForSwipe.toString());
+                    //Log.d("saved list", moviesSwipedRight.toString());
+                    //addedMoviesForSwipe.remove(Index);
+                    addItemToList(movieName, movieGenre);
                 }
                 if (direction == Direction.Top){
                     Toast.makeText(MainActivity.this, "Direction Top", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Left){
                     Toast.makeText(MainActivity.this, "Direction Left", Toast.LENGTH_SHORT).show();
+                    //addedMoviesForSwipe.remove(Index);
+                    //addedMoviesForSwipe.remove(Index);
+                    //.d("deleted movies", addedMoviesForSwipe.toString());
                 }
                 if (direction == Direction.Bottom){
                     Toast.makeText(MainActivity.this, "Direction Bottom", Toast.LENGTH_SHORT).show();
@@ -94,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCardAppeared(View view, int position) {
                 TextView tv = view.findViewById(R.id.movie_name);
+                TextView genreMovie = view.findViewById(R.id.movie_genre);
+                ImageView movieImageUrl = view.findViewById(R.id.movie_image);
+                //View movieNameView = view.findViewById(R.id.movie_name);
+                movieName = String.valueOf(tv.getText());
+                movieGenre = String.valueOf(genreMovie.getText());
+                //movieImage = String.valueOf(movieImageUrl.get);
+
+                Log.d("Movie added", movieName + ' ' + movieGenre);
                 Log.d(TAG, "onCardAppeared: " + position + ", movie name: " + tv.getText());
             }
 
@@ -120,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
-
-        addList();
     }
 
     private void paginate() {
@@ -133,13 +153,14 @@ public class MainActivity extends AppCompatActivity {
         hasil.dispatchUpdatesTo(adapter);
     }
 
+    //Hier worden de films ingeladen vanaf de database
     private List<ItemModel> addList() {
         String Movieurl = "https://movieserieswiperdb-qioab.ondigitalocean.app/api/auth/movies";
-        List<ItemModel> items = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Movieurl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("swiped movies", addedMoviesForSwipe.toString());
                         try{
                             JSONArray array = new JSONArray(response);
 
@@ -149,8 +170,10 @@ public class MainActivity extends AppCompatActivity {
 
                                 item.setMovieName(jsonObject.getString("movieName"));
                                 item.setGenre(jsonObject.getString("genre"));
+                                item.setMovieImage(jsonObject.getString("movieImageUrl"));
                                 items.add(item);
                                 adapter.notifyDataSetChanged();
+                                Log.d("List data", items.toString());
                                 Log.d("movie response", response);
                             }
                         }catch(JSONException e){
@@ -168,6 +191,34 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
         return items;
+    }
+
+    //hier worden de items die naar rechts worden geswiped naar de saveditems gestuurd.
+    public void addItemToList(String movieName, String movieGenre){
+        String url = "https://movieserieswiperdb-qioab.ondigitalocean.app/api/auth/saveditems";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("check for post response", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error bij post", error.toString());
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", movieName);
+                params.put("genre", movieGenre);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 }
