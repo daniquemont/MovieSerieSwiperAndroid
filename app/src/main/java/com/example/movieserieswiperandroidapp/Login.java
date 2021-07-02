@@ -66,17 +66,17 @@ public class Login extends AppCompatActivity {
         String password = lPassword.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
-            lEmail.setError("Voer je email in om in te kunnen loggen!");
+            lEmail.setError("Enter your email to log in!");
             isValid = false;
         }else {
             if(!isEmail(lEmail)){
-                lEmail.setError("Gebruik een geldige email");
+                lEmail.setError("Use a vaild email!");
                 isValid = false;
             }
         }
 
         if(TextUtils.isEmpty(password)){
-            lPassword.setError("Je moet een wachtwoord invoeren!");
+            lPassword.setError("Enter your password!");
             isValid = false;
         }
 
@@ -107,14 +107,14 @@ public class Login extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(Login.this, "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Successvolly logged in!", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("registerError", error.toString());
-                        Toast.makeText(Login.this, "Register Error! " + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Login Error! " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
         {

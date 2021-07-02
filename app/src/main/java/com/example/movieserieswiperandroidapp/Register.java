@@ -91,23 +91,23 @@ public class Register extends AppCompatActivity {
 
 
         if(TextUtils.isEmpty(name)){
-            rName.setError(("Voer uw naam in"));
+            rName.setError(("Enter yur name"));
             isValid = false;
             return;
         }
 
         if (TextUtils.isEmpty(email)){
-            rEmail.setError("Email is niet ingevuld");
+            rEmail.setError("Enter your email");
             isValid = false;
             return;
         }
         if (TextUtils.isEmpty(password)){
-            rPassword.setError("Password is niet ingevuld");
+            rPassword.setError("Enter a password");
             isValid = false;
             return;
         }
         if(password.length() < 6){
-            rPassword.setError("Password moet meer dan 6 karakters zijn");
+            rPassword.setError("Password must be more than 6 characters.");
             isValid = false;
         }
 
@@ -130,14 +130,14 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("checkResponse", response);
-                        Toast.makeText(Register.this, "Succesvol geregistreerd" + response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Successfully registered" + response, Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("registerError", error.toString());
-                        Toast.makeText(Register.this, "Register Error! " + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Registered Error! " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
         {

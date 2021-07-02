@@ -68,6 +68,7 @@ public class Profile extends AppCompatActivity {
                 switch (i){
                     case R.id.radioButtonFilm:
                         rbtnFilm.isChecked();
+                        // variabelen aanmaken en doorsturen naar de main?
                         Log.d("checkRadio", "Jaaaaaaa");
                         break;
                     case R.id.radioButtonSerie:
@@ -94,7 +95,7 @@ public class Profile extends AppCompatActivity {
                         try {
                             json = new JSONObject(responseString);
                             String name = json.getString("name");
-                            username.setText(name);
+                            username.setText("Hi " + name);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -103,7 +104,7 @@ public class Profile extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("registerError", error.toString());
+                        Log.d("usernameError", error.toString());
                         Toast.makeText(Profile.this, "Error! " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -131,13 +132,13 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("checkResponse", response);
-                        Toast.makeText(Profile.this, "Succesvol uitgelogd", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Profile.this, "Successvolvoly logged out", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("registerError", error.toString());
+                        Log.d("logoutError", error.toString());
                         Toast.makeText(Profile.this, "Error! " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
