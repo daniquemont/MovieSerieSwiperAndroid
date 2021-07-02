@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Movie;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,11 +54,26 @@ public class MainActivity extends AppCompatActivity {
     public String movieDescription;
     public String movieImage;
 
+    ImageButton profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        profileButton = findViewById(R.id.profileButton);
+        Bundle bundle = getIntent().getExtras();
+        String token = bundle.getString("token");
+        Log.d("ProfileToken", token);
+
+        profileButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Profile.class);
+                intent.putExtra("token", token);
+                startActivity(intent);
+            }
+        });
 
 
         CardStackView cardStackView = findViewById(R.id.card_stack_view);
